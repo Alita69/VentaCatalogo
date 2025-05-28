@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas Realizadas</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .acciones a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Ventas Registradas</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="venta : ${ventas}">
+                <td th:text="${venta.id}"></td>
+                <td th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${venta.cliente.nombre}"></td>
+                <td th:text="${venta.total}"></td>
+                <td class="acciones">
+                    <a th:href="@{/carrito/ventas/detalle/{id}(id=${venta.id})}">Ver Detalle</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

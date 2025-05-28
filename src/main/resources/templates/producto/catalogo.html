@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f8;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e1e1e;
+            margin-bottom: 30px;
+        }
+
+        .filtros {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filtros input,
+        .filtros select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #222;
+            min-width: 180px;
+        }
+
+        .filtros button {
+            padding: 10px 18px;
+            background-color: #1e3a5f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filtros button:hover {
+            background-color: #30527a;
+        }
+
+        .catalogo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .producto-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 240px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .producto-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .producto-card h3 {
+            margin: 15px 0 5px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .producto-card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .producto-card strong {
+            color: #111;
+        }
+
+        .ver-detalle {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            background-color: #1e3a5f;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .ver-detalle:hover {
+            background-color: #2f537e;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Catálogo de Productos</h2>
+
+    <!-- Filtros -->
+    <form th:action="@{/productos/catalogo}" method="get" class="filtros">
+        <input type="text" name="nombre" placeholder="Buscar producto..." th:value="${nombre}">
+        <select name="categoriaId">
+            <option value="">Todas las categorías</option>
+            <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}" 
+                    th:selected="${cat.id == categoriaId}"></option>
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <!-- Catálogo -->
+    <div class="catalogo">
+        <div class="producto-card" th:each="producto : ${productos}">
+            <img th:src="@{/imagenes/{img}(img=${producto.imagen})}" alt="Imagen del producto">
+            <h3 th:text="${producto.nombre}">Nombre</h3>
+            <p th:text="${producto.descripcion}">Descripción</p>
+            <p><strong>$<span th:text="${producto.precio}"></span></strong></p>
+            <a class="ver-detalle" th:href="@{/productos/catalogo/{id}(id=${producto.id})}">Ver Detalle</a>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

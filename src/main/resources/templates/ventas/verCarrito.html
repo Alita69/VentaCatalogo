@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .acciones a {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+
+        .botones {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .botones a, .botones button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .volver {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .comprar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .comprar:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Carrito de Compras</h2>
+<p th:if="${mensaje}" th:text="${mensaje}" style="color: red; font-weight: bold; text-align: center;"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Quitar</th>
+            </tr>
+        </thead>
+<tbody>
+    <tr th:each="detalle, iterStat : ${carrito}">
+        <td th:text="${detalle.producto.nombre}"></td>
+        <td th:text="${detalle.producto.precio}"></td>
+        <td th:text="${detalle.cantidad}"></td>
+        <td th:text="${detalle.cantidad * detalle.producto.precio}"></td>
+        <td class="acciones">
+            <a th:href="@{/carrito/eliminar/{index}(index=${iterStat.index})}">Eliminar</a>
+        </td>
+    </tr>
+</tbody>
+
+    </table>
+
+    <div class="botones">
+        <a class="volver" th:href="@{/carrito/productos}">← Seguir comprando</a>
+
+
+        <form th:action="@{/carrito/finalizar}" method="post" style="display: inline;">
+            <label for="clienteId">Selecciona vendedor:</label>
+            <select name="clienteId" required>
+                <option value="">-- Selecciona --</option>
+                <option th:each="cli : ${clientes}" th:value="${cli.id}" th:text="${cli.nombre}"></option>
+            </select>
+            <button type="submit" class="comprar" th:disabled="${carrito.size() == 0}">Confirmar compra</button>
+
+        </form>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

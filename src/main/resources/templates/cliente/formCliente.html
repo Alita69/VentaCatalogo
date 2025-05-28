@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${cliente.id == null} ? 'Nuevo Cliente' : 'Editar Cliente'">Formulario Cliente</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+        }
+
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            margin-left: 10px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{fragments/menu :: menu-principal}"></div>
+
+<main>
+    <h2 th:text="${cliente.id == null} ? 'Agregar Vendedor' : 'Editar Vendedor'">Formulario</h2>
+
+    <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Nombre:</label>
+        <input type="text" th:field="*{nombre}" required />
+
+        <label>Email:</label>
+        <input type="email" th:field="*{correo}" required />
+
+        <label>Teléfono:</label>
+        <input type="tel" th:field="*{telefono}" required />
+
+        <button type="submit">Guardar</button>
+        <a th:href="@{/clientes}">Cancelar</a>
+    </form>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: pie-pagina}"></div>
+
+</body>
+</html>

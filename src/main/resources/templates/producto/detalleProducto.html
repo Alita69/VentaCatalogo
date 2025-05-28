@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Detalle de ' + ${producto.nombre}">Detalle Producto</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        .detalle {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .detalle img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .detalle h2 {
+            color: #222;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .detalle p {
+            font-size: 1em;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .precio {
+            font-size: 1.3em;
+            color: #007bff;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .stock {
+            font-size: 1em;
+            color: #333;
+        }
+
+        .proveedor {
+            font-size: 1em;
+            color: #444;
+        }
+
+        .btn-regresar {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: #1e3a5f;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-regresar:hover {
+            background-color: #294f7a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <div class="detalle">
+        <h2 th:text="${producto.nombre}">Nombre</h2>
+
+        <img th:src="@{/imagenes/{img}(img=${producto.imagen})}" th:alt="'Imagen de ' + ${producto.nombre}">
+
+        <p th:text="${producto.descripcion}">Descripción</p>
+
+        <p class="precio">Precio: $<span th:text="${producto.precio}">0.00</span></p>
+
+        <p class="stock">Stock disponible: <span th:text="${producto.stock}">0</span></p>
+
+        <p class="proveedor">Proveedor: <span th:text="${producto.proveedor != null ? producto.proveedor.nombre : 'Sin proveedor'}">Proveedor</span></p>
+
+        <!-- Botón para volver al catálogo -->
+        <a class="btn-regresar" th:href="@{/productos/catalogo}">← Volver al Catálogo</a>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

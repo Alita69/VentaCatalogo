@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Proveedores</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .acciones {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .acciones a {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .botones a {
+            margin: 0 5px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .botones a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Proveedores Registrados</h2>
+
+    <div class="acciones">
+        <a th:href="@{/proveedores/nuevo}">+ Agregar Proveedor</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Empresa</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="prov : ${proveedores}">
+                <td th:text="${prov.id}"></td>
+                <td th:text="${prov.nombre}"></td>
+                <td th:text="${prov.empresa}"></td>
+                <td th:text="${prov.email}"></td>
+                <td th:text="${prov.telefono}"></td>
+                <td class="botones">
+                    <a th:href="@{/proveedores/editar/{id}(id=${prov.id})}">Editar</a>
+                    <a th:href="@{/proveedores/eliminar/{id}(id=${prov.id})}">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

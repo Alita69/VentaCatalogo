@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Productos</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f8;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e1e1e;
+            margin-bottom: 30px;
+        }
+
+        .agregar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .agregar a {
+            background-color: #1e3a5f;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .agregar a:hover {
+            background-color: #2e537a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            color: #222;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e8ecf1;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .acciones a {
+            margin: 0 5px;
+            color: #1e3a5f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menú principal -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Productos Disponibles</h2>
+
+    <div class="agregar">
+        <a th:href="@{/productos/nuevo}">➕ Agregar nuevo producto</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Categoría</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="producto : ${productos}">
+            <td>
+                <img th:src="@{'/imagenes/' + ${producto.imagen}}" alt="imagen producto"/>
+            </td>
+            <td th:text="${producto.nombre}"></td>
+            <td th:text="${producto.descripcion}"></td>
+            <td th:text="${producto.precio}"></td>
+            <td th:text="${producto.stock}"></td>
+            <td th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}"></td>
+            <td th:text="${producto.proveedor != null ? producto.proveedor.nombre : 'Sin proveedor'}"></td>
+            <td class="acciones">
+                <a th:href="@{/productos/editar/{id}(id=${producto.id})}">✏ Editar</a> |
+                <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}"
+                   onclick="return confirm('¿Seguro que deseas eliminar este producto?')">🗑 Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Pie de página -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

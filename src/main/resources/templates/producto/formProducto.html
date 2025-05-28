@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Producto</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e1e1e;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 1em;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        span {
+            color: #c0392b;
+            font-size: 0.9em;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2e537a;
+        }
+
+        a {
+            margin-left: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menú principal -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Registrar producto</h2>
+
+    <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" th:field="*{nombre}" id="nombre" required />
+
+        <label for="descripcion">Descripción:</label>
+        <textarea th:field="*{descripcion}" id="descripcion" required></textarea>
+
+        <label for="precio">Precio:</label>
+        <input type="number" th:field="*{precio}" step="0.01" id="precio" required />
+
+        <label for="stock">Stock:</label>
+        <input type="number" th:field="*{stock}" id="stock" required />
+
+        <label for="categoria">Categoría:</label>
+        <select th:field="*{categoria.id}" id="categoria" required>
+            <option value="">Selecciona una categoría</option>
+            <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+        </select>
+
+        <label for="proveedor">Proveedor:</label>
+        <select th:field="*{proveedor.id}" id="proveedor" required>
+            <option value="">Selecciona un proveedor</option>
+            <option th:each="prov : ${proveedores}" th:value="${prov.id}" th:text="${prov.nombre}"></option>
+        </select>
+
+        <label for="imagen">Imagen del producto:</label>
+        <input type="file" name="imagenArchivo" id="imagen" accept="image/*" />
+
+        <button type="submit">Guardar</button>
+        <a th:href="@{/productos}">Cancelar</a>
+    </form>
+</main>
+
+<!-- Pie de página -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+</body>
+</html>

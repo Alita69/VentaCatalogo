@@ -1,0 +1,81 @@
+<div th:fragment="menu-principal">
+    <header style="background-color: #ffffff; color: #333; padding: 15px 30px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1 style="margin: 0; font-size: 1.4em; font-weight: bold; color: #007bff;">
+                Venta por <span style="color: #333;">Catálogo</span>
+            </h1>
+
+            <nav style="margin-top: 10px;">
+                <ul style="list-style: none; display: flex; flex-wrap: wrap; gap: 15px; margin: 0; padding: 0; align-items: center;">
+                    <!-- Roles compartidos -->
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR', 'VENDEDOR')"><a th:href="@{/productos/catalogo}" class="menu-link">🏠 Inicio</a></li>
+
+                    <!-- Solo admin -->
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/productos}" class="menu-link">📦 Productos</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/categorias}" class="menu-link">🗂️ Categorías</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/clientes}" class="menu-link">👥 Vendedores</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/proveedores}" class="menu-link">🚚 Proveedores</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/reabastecimientos}" class="menu-link">🔄 Reabastecimientos</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/pedidos}" class="menu-link">📝 Pedidos</a></li>
+
+                    <!-- Solo vendedor -->
+                    <li sec:authorize="hasRole('VENDEDOR')"><a th:href="@{/carrito/productos}" class="menu-link">🛒 Comprar</a></li>
+                    <li sec:authorize="hasRole('VENDEDOR')"><a th:href="@{/carrito/ver}" class="menu-link">🧺 Carrito</a></li>
+
+                    <!-- Ambos -->
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','VENDEDOR')"><a th:href="@{/carrito/ventas/lista}" class="menu-link">📑 Historial</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','VENDEDOR')"><a th:href="@{/entregas}" class="menu-link">📦 Entregas</a></li>
+
+                    <!-- Usuario y logout -->
+                    <li>
+                        <span style="color: #007bff; font-weight: bold;">👤 <span sec:authentication="name"></span></span>
+                        <span style="background-color: #e0e0e0; color: #333; padding: 3px 6px; border-radius: 4px; margin-left: 4px;">
+                            <span sec:authentication="principal.authorities"></span>
+                        </span>
+                    </li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">Cerrar sesión</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <style>
+        .menu-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .menu-link::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+        }
+
+        .menu-link:hover {
+            color: #007bff;
+        }
+
+        .menu-link:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            header nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</div>

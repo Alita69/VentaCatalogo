@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Usuario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3a5f, #30aabc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #f9fbfd;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 480px;
+      animation: fadeIn 0.9s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a5f;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 14px 14px 46px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: white;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #1e3a5f;
+    }
+
+    .form-group svg {
+      position: absolute;
+      top: 13px;
+      left: 14px;
+      width: 18px;
+      height: 18px;
+      fill: #888;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #1e3a5f;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #264b78;
+      transform: scale(1.02);
+    }
+
+    select {
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%231e3a5f" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 18px;
+    }
+
+    .cancel-link {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      text-decoration: none;
+      color: #1e3a5f;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .cancel-link:hover {
+      color: #264b78;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Registro de Usuario</h2>
+
+  <form th:action="@{/registro}" method="post" th:object="${usuario}">
+    
+    <!-- Nombre completo -->
+    <div class="form-group">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+      <input type="text" th:field="*{nombre}" placeholder="Nombre completo" required>
+    </div>
+
+    <!-- Correo electrónico / usuario -->
+    <div class="form-group">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 
+        1.1.9 2 2 2h16c1.1 0 2-.9 
+        2-2V6c0-1.1-.9-2-2-2zm0 
+        4l-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+      <input type="email" th:field="*{username}" placeholder="Correo electrónico (acceso)" required>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-group">
+      <svg viewBox="0 0 24 24"><path d="M12 17a2 2 0 1 0 
+        0-4 2 2 0 0 0 0 4zm6-10V5a5 5 0 0 0-10 
+        0v2H5v14h14V7h-1zM8 5a4 4 0 0 1 
+        8 0v2H8V5z"/>
+      </svg>
+      <input type="password" th:field="*{password}" placeholder="Contraseña" required>
+    </div>
+
+    <!-- Correo de contacto -->
+    <div class="form-group">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 
+        2v12c0 1.1.9 2 2 2h16c1.1 
+        0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 
+        4l-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+      <input type="email" name="correo" placeholder="Correo de contacto" required>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="form-group">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 
+        0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 
+        1.02-.24 1.12.37 2.33.57 3.57.57.55 0 
+        1 .45 1 1V20c0 .55-.45 1-1 
+        1-9.39 0-17-7.61-17-17 
+        0-.55.45-1 1-1h3.5c.55 0 
+        1 .45 1 1 0 1.25.2 2.45.57 
+        3.57.11.35.03.74-.25 
+        1.02l-2.2 2.2z"/>
+      </svg>
+      <input type="text" name="telefono" placeholder="Teléfono" required>
+    </div>
+
+    <!-- Rol -->
+    <div class="form-group">
+      <select name="rol" required>
+        <option value="">-- Selecciona un rol --</option>
+        <option value="VENDEDOR">Vendedor</option>
+        <option value="ADMINISTRADOR">Administrador</option>
+      </select>
+    </div>
+
+    <button type="submit">Registrarme</button>
+
+    <a href="/login" class="cancel-link">Cancelar</a>
+  </form>
+</div>
+
+</body>
+</html>

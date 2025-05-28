@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Reabastecimiento</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e1e1e;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select, input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2e537a;
+        }
+
+        a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: #555;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Registrar Reabastecimiento</h2>
+
+    <form th:action="@{/reabastecimientos/guardar}" th:object="${reabastecimiento}" method="post">
+
+        <label for="producto">Producto:</label>
+        <select th:field="*{producto.id}" id="producto" required>
+            <option value="">Selecciona un producto</option>
+            <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+        </select>
+
+        <label for="proveedor">Proveedor:</label>
+        <select th:field="*{proveedor.id}" id="proveedor" required>
+            <option value="">Selecciona un proveedor</option>
+            <option th:each="prov : ${proveedores}" th:value="${prov.id}" th:text="${prov.nombre}"></option>
+        </select>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" th:field="*{cantidad}" id="cantidad" min="1" required />
+
+        <label for="motivo">Motivo:</label>
+        <textarea th:field="*{motivo}" id="motivo" rows="3"></textarea>
+
+        <button type="submit">Guardar</button>
+        <a th:href="@{/reabastecimientos}">Cancelar</a>
+    </form>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

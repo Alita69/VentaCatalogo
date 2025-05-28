@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Entrega</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e1e1e;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            font-size: 1em;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .botones {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .botones button {
+            padding: 10px 20px;
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .botones button:hover {
+            background-color: #2e537a;
+        }
+
+        .botones a {
+            text-decoration: none;
+            color: #444;
+        }
+
+        .botones a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Registrar Entrega</h2>
+
+    <div class="form-container">
+        <form th:action="@{/entregas/guardar}" th:object="${entrega}" method="post">
+            <label for="venta">Venta:</label>
+            <select th:field="*{venta.id}" id="venta" required>
+                <option value="">Selecciona una venta</option>
+                <option th:each="v : ${ventas}" th:value="${v.id}" th:text="'Venta #' + ${v.id}"></option>
+            </select>
+
+            <label for="estado">Estado:</label>
+            <select th:field="*{estado}" id="estado" required>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En camino">En camino</option>
+                <option value="Entregado">Entregado</option>
+            </select>
+
+            <label for="observacion">Observación:</label>
+            <textarea th:field="*{observacion}" id="observacion" rows="3"></textarea>
+
+            <div class="botones">
+                <button type="submit">Guardar</button>
+                <a th:href="@{/entregas}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

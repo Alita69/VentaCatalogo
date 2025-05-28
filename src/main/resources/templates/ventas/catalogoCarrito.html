@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .catalogo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .producto-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .producto-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .producto-card h3 {
+            margin: 10px 0 5px;
+            font-size: 1.1em;
+        }
+
+        .producto-card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .btn-carrito {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .btn-carrito:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Catálogo de Productos</h2>
+
+    <div class="catalogo">
+        <div class="producto-card" th:each="producto : ${productos}">
+            <img th:src="@{'/imagenes/' + ${producto.imagen}}" alt="Imagen del producto">
+            <h3 th:text="${producto.nombre}">Nombre</h3>
+            <p th:text="${producto.descripcion}">Descripción</p>
+            <p><strong>$<span th:text="${producto.precio}"></span></strong></p>
+
+            <!-- Botón para agregar al carrito -->
+            <form th:action="@{/carrito/agregar}" method="post">
+                <input type="hidden" name="productoId" th:value="${producto.id}" />
+                <input type="hidden" name="cantidad" value="1" />
+                <button class="btn-carrito" type="submit">Agregar al carrito 🛒</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

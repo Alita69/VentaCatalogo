@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Categorías</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f6fa;
+            color: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 30px;
+        }
+
+        .agregar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .agregar a {
+            background-color: #1e3a5f;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .agregar a:hover {
+            background-color: #294f7a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            color: #333;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .acciones a {
+            margin: 0 5px;
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Categorías Registradas</h2>
+
+    <div class="agregar">
+        <a th:href="@{/categorias/nueva}">➕ Nueva Categoría</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="categoria : ${categorias}">
+                <td th:text="${categoria.id}"></td>
+                <td th:text="${categoria.nombre}"></td>
+                <td class="acciones">
+                    <a th:href="@{/categorias/editar/{id}(id=${categoria.id})}">✏ Editar</a>
+                    |
+                    <a th:href="@{/categorias/eliminar/{id}(id=${categoria.id})}"
+                       onclick="return confirm('¿Seguro que deseas eliminar esta categoría?')">🗑 Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

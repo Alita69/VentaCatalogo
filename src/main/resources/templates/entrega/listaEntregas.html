@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Entregas</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e1e1e;
+        }
+
+        .nuevo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nuevo a {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nuevo a:hover {
+            background-color: #2e537a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e8ecf1;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .acciones a {
+            margin: 0 6px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Historial de Entregas</h2>
+
+    <!-- Mostrar solo si no es VENDEDOR -->
+    <div class="nuevo" sec:authorize="!hasRole('VENDEDOR')">
+        <a th:href="@{/entregas/nuevo}">➕ Nueva Entrega</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Observación</th>
+                <th>Venta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="e : ${entregas}">
+                <td th:text="${#temporals.format(e.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                <td th:text="${e.estado}">Estado</td>
+                <td th:text="${e.observacion}">Observación</td>
+                <td th:text="${e.venta != null ? 'Venta #' + e.venta.id : 'Sin venta'}"></td>
+                <td class="acciones">
+                    <span sec:authorize="!hasRole('VENDEDOR')">
+                        <a th:href="@{/entregas/detalle/{id}(id=${e.id})}">🔍 Ver Detalle</a> |
+                        <a th:href="@{/entregas/eliminar/{id}(id=${e.id})}"
+                           onclick="return confirm('¿Eliminar esta entrega?')">🗑 Eliminar</a>
+                    </span>
+                    <span sec:authorize="hasRole('VENDEDOR')">🔒</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

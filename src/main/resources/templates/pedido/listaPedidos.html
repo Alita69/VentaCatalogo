@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pedidos</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nuevo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nuevo a {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .nuevo a:hover {
+            background-color: #2e537a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e8ecf1;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .acciones a {
+            margin: 0 6px;
+            color: #1e3a5f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .acciones a:hover {
+            text-decoration: underline;
+        }
+
+        select {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 8px;
+        }
+
+        button {
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2e537a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Historial de Pedidos</h2>
+
+    <div class="nuevo">
+        <a th:href="@{/pedidos/nuevo}">➕ Nuevo Pedido</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Proveedor</th>
+                <th>Cantidad</th>
+                <th>Estado</th>
+                <th>Comentario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${pedidos}">
+                <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                <td th:text="${p.producto.nombre}">Producto</td>
+                <td th:text="${p.proveedor.nombre}">Proveedor</td>
+                <td th:text="${p.cantidad}">Cantidad</td>
+                <td>
+                    <form th:action="@{/pedidos/estado/{id}(id=${p.id})}" method="post">
+                        <select name="estado">
+                            <option th:selected="${p.estado == 'Pendiente'}">Pendiente</option>
+                            <option th:selected="${p.estado == 'En Proceso'}">En Proceso</option>
+                            <option th:selected="${p.estado == 'Completado'}">Completado</option>
+                            <option th:selected="${p.estado == 'Cancelado'}">Cancelado</option>
+                        </select>
+                        <button type="submit">Actualizar</button>
+                    </form>
+                </td>
+                <td th:text="${p.observacion}">Comentario</td>
+                <td class="acciones">
+                    <a th:href="@{/pedidos/eliminar/{id}(id=${p.id})}"
+                       onclick="return confirm('¿Estás seguro de eliminar este pedido?')">🗑 Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>

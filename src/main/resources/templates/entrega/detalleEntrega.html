@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Entrega</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e1e1e;
+        }
+
+        .info {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .info p {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e8ecf1;
+        }
+
+        img {
+            height: 60px;
+            border-radius: 5px;
+        }
+
+        .estado-form {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        select, button {
+            padding: 10px 14px;
+            margin: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #1e3a5f;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2e537a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/menu :: menu-principal"></div>
+
+<main>
+    <h2>Detalle de Entrega</h2>
+
+    <div class="info">
+        <p><strong>Fecha de Entrega:</strong> <span th:text="${#temporals.format(entrega.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Estado Actual:</strong> <span th:text="${entrega.estado}"></span></p>
+        <p><strong>Observación:</strong> <span th:text="${entrega.observacion}"></span></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="d, iterStat : ${detalles}">
+                <td><img th:src="@{'/imagenes/' + ${d.producto.imagen}}" alt="imagen producto"></td>
+                <td th:text="${d.producto.nombre}"></td>
+                <td th:text="${d.cantidad}"></td>
+                <td th:text="${#numbers.formatDecimal(d.precioUnitario, 1, 'POINT', 2, 'NONE')}"></td>
+                <td th:text="${#numbers.formatDecimal(d.precioUnitario * d.cantidad, 1, 'POINT', 2, 'NONE')}"></td>
+                <td>
+                    <form th:action="@{/entregas/detalle/cambiarEstado/{id}(id=${d.id})}" method="post">
+                        <select name="estado">
+                            <option value="Pendiente" th:selected="${d.estadoEntrega == 'Pendiente'}">Pendiente</option>
+                            <option value="En camino" th:selected="${d.estadoEntrega == 'En camino'}">En camino</option>
+                            <option value="Entregado" th:selected="${d.estadoEntrega == 'Entregado'}">Entregado</option>
+                        </select>
+                        <button type="submit">Actualizar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="estado-form">
+        <form th:action="@{/entregas/cambiarEstado}" method="post">
+            <input type="hidden" th:name="id" th:value="${entrega.id}" />
+            <label for="estado">Cambiar Estado General:</label>
+            <select name="estado" id="estado" required>
+                <option value="Pendiente" th:selected="${entrega.estado == 'Pendiente'}">Pendiente</option>
+                <option value="En camino" th:selected="${entrega.estado == 'En camino'}">En camino</option>
+                <option value="Entregado" th:selected="${entrega.estado == 'Entregado'}">Entregado</option>
+            </select>
+            <button type="submit">Actualizar Estado</button>
+        </form>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: pie-pagina"></div>
+
+</body>
+</html>
